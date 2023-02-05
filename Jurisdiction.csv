@@ -1,0 +1,55 @@
+JurisdictionID,Name,Capital,Population,Area
+AK,Alaska,Juneau,731545,665384
+AL,Alabama,Montgomery,4903185,52420
+AR,Arkansas,Little Rock,3017804,53179
+AZ,Arizona,Phoenix,7278717,113990
+CA,California,Sacramento,39512223,163695
+CO,Colorado,Denver,5758736,104094
+CT,Connecticut,Hartford,3565278,5543
+DC,District of Columbia,,705749,68
+DE,Delaware,Dover,973764,2489
+FL,Florida,Tallahassee,21477737,65758
+GA,Georgia,Atlanta,10617423,59425
+GU,Guam,Hagatna,168783,571
+HI,Hawaii,Honolulu,1415872,10932
+IA,Iowa,Des Moines,3155070,56273
+ID,Idaho,Boise,1787065,83569
+IL,Illinois,Springfield,12671821,57914
+IN,Indiana,Indianapolis,6732219,36420
+KS,Kansas,Topeka,2913314,82278
+KY,Kentucky,Frankfort,4467673,40408
+LA,Louisiana,Baton Rouge,4648794,52378
+MA,Massachusetts,Boston,6892503,10554
+MD,Maryland,Annapolis,6045680,12406
+ME,Maine,Augusta,1344212,35380
+MI,Michigan,Lansing,9986857,96714
+MN,Minnesota,St. Paul,5639632,86936
+MO,Missouri,Jefferson City,6137428,69707
+MS,Mississippi,Jackson,2976149,48432
+MT,Montana,Helena,1068778,147040
+NC,North Carolina,Raleigh,10488084,53819
+ND,North Dakota,Bismarck,762062,70698
+NE,Nebraska,Lincoln,1934408,77348
+NH,New Hampshire,Concord,1359711,9349
+NJ,New Jersey,Trenton,8882190,8723
+NM,New Mexico,Santa Fe,2096829,121590
+NV,Nevada,Carson City,3080156,110572
+NY,New York,Albany,19453561,54555
+OH,Ohio,Columbus,11689100,44826
+OK,Oklahoma,Oklahoma City,3956971,69899
+OR,Oregon,Salem,4217737,98379
+PA,Pennsylvania,Harrisburg,12801989,46054
+PR,Puerto Rico,San Juan,3193694,5325
+RI,Rhode Island,Providence,1059361,1545
+SC,South Carolina,Columbia,5148714,32020
+SD,South Dakota,Pierre,884659,77116
+TN,Tennessee,Nashville,6829174,42144
+TX,Texas,Austin,28995881,268596
+UT,Utah,Salt Lake City,3205958,84897
+VA,Virginia,Richmond,8535519,42775
+VI,U.S. Virgin Islands,Charlotte Amalie,106290,733
+VT,Vermont,Montpelier,623989,9616
+WA,Washington,Olympia,7614893,71298
+WI,Wisconsin,Madison,5822434,65496
+WV,West Virginia,Charleston,1792147,24230
+WY,Wyoming,Cheyenne,578759,97813
