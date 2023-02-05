@@ -5,3 +5,5 @@ In this project, I'm gonna be setting up a database for storing COVID-19 data us
 I'll be using the CREATE and ALTER keywords to create databases, tables, columns, and keys, and putting my DDL skills to the test by writing a database script. I'm also going to try out different ways to insert data into the database, including manual data entry, scripting, and importing CSV files. Finally, I'll be getting hands-on experience with modifying existing data in a table using data manipulation language (DML) commands.  
 
 This project is the perfect chance for me to up my game and master multiple methods for creating a database and inserting data. The physical database design and CSV file provided will be my starting point, and I'll end the assignment by manually inserting, updating, and deleting data.
+
+*This is an ongoing project and will take about 5 weeks to complete as we finish out our course manipulating the database we created in this repo. Be on the look out for anychanges that may continue to happen.*
