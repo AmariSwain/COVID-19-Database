@@ -33,11 +33,11 @@ GO
 /* Definition for the "Jurisdiction" Table */
 
 CREATE TABLE Jurisdiction (
-	JurisdictionID				VARCHAR (5) NOT NULL,
-	Name						VARCHAR (50) NOT NULL,
-	Capital						VARCHAR (50) NULL, 
-	Population					INT NOT NULL,
-	Area						FLOAT (1) NOT NULL,
+	JurisdictionID VARCHAR(5) NOT NULL,
+	Name VARCHAR(50) NOT NULL,
+	Capital VARCHAR(50) NULL,
+	Population INT NOT NULL,
+	Area FLOAT(1) NOT NULL,
 	CONSTRAINT PK_Jurisdiction PRIMARY KEY (JurisdictionID)
 );
 GO	
@@ -45,20 +45,16 @@ GO
 /* Definition for the "CovidCases" Table */
 
 CREATE TABLE CovidCases (
-	CalendarDate				DATE NOT NULL,
-	JurisdictionID				VARCHAR (5) NOT NULL,
-	ReportedCovidCases			INT NOT NULL,
-	CONSTRAINT PK_CovidCases PRIMARY KEY (CalendarDate)
+	??????????
+	CONSTRAINT PK_CovidCases PRIMARY KEY (??????????)
 );
 GO
 
 /* Definition for the "CovidDeaths" Table */
 
 CREATE TABLE CovidDeaths (
-	CalendarDate				DATE NOT NULL,
-	JurisdictionID				VARCHAR (5) NOT NULL,
-	ReportedCovidCases			INT NOT NULL,
-	CONSTRAINT PK_CovidDeaths PRIMARY KEY (CalendarDate)
+	??????????
+	CONSTRAINT PK_CovidDeaths PRIMARY KEY (??????????)
 );
 GO
 
