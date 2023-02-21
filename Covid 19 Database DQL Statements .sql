@@ -100,3 +100,116 @@ USE Jurisdiction_DB
    WHERE ChildFormulation = 'TRUE' AND AdultFormulation = 'TRUE'
 
    ORDER BY Ingredient;
+
+/*Testing Query for results comparison*/
+SELECT SUM(Population) AS 'US Population'
+
+FROM Jurisdiction;
+
+
+/* Displaying Highest 1st dose volume*/
+USE COVID19_DB
+ 
+ SELECT Max(DoseVolume) AS 'Highest Dose Volume'
+
+ From VaccineDosage;
+
+ /* Displaying Lowest dose volume*/
+USE COVID19_DB
+ 
+ SELECT Min(DoseVolume) AS 'Lowest Dose Volume'
+
+ From VaccineDosage;
+
+ /* Displaying Lowest, Highest , and average for covid cases on Nov 30th 2020*/
+USE COVID19_DB;
+
+SELECT MIN(ReportedCovidCases) AS 'Lowest Reported Cases', MAX(ReportedCovidCases) AS 'Highest Reported Cases', AVG(ReportedCovidCases) AS 'Average Reported Cases'
+
+FROM CovidCases
+
+WHERE CalendarDate = '2020-11-30';
+
+/* Population densities in alphabetical order*/
+USE Jurisdiction_DB;
+
+SELECT Name, Sum(Population / Area) AS 'Population Density '
+
+FROM Jurisdiction
+
+
+WHERE Name  LIKE '%Wisconsin%' OR Name LIKE '%Alaska%' OR Name LIKE '%New Jersey%'
+
+Group By Name
+
+ORDER BY Name ASC;
+
+/* Average reported covid deaths for the week of Sept 19th-25th, 2021*/
+USE COVID19_DB
+
+SELECT CalendarDate, AVG(ReportedCovidDeaths) AS 'Average State COVID-19 Fatalities'
+
+FROM CovidDeaths
+
+WHERE CalendarDate >= '2021-09-19' AND CalendarDate <= '2021-09-25'
+
+GROUP BY CalendarDate
+
+ORDER BY CalendarDate;
+
+/*Calendar Dates and total deaths for days that exceed 3750. Show date and order query results in descending order*/
+USE COVID19_DB
+
+SELECT CalendarDate, SUM(ReportedCovidDeaths) AS 'Total COVID-19 Fatalities'
+
+FROM CovidDeaths
+
+GROUP BY CalendarDate
+
+HAVING SUM(ReportedCovidDeaths ) > 3750 
+
+ORDER BY SUM(ReportedCovidDeaths) DESC;
+
+/*Number of  Covid- 19 Vaccine ingredients in child vaccine formula. */
+USE COVID19_DB
+
+SELECT COUNT(Ingredient) AS 'Number of Ingredients'
+
+FROM VaccineIngredient
+
+WHERE ChildFormulation = 'TRUE' ;
+
+/*Difference between Max and Min daily reported cases for August 1-7th 2021, Group and order results by date in chronological order*/ 
+USE COVID19_DB
+
+SELECT CalendarDate, Max(ReportedCovidCases) - Min(ReportedCovidCases) AS 'Covid-19 Case Difference'
+
+FROM CovidCases
+
+WHERE CalendarDate BETWEEN '2021-08-01' AND '2021-08-07'
+
+GROUP BY CalendarDate
+
+ORDER BY CalendarDate ASC;
+
+/* Cumulative Covid-19 vaccine dose distribution per dose series */
+USE COVID19_DB
+
+SELECT SeriesDose, SUM(ReportedDosesAdministered) AS 'Cumulative Dose Allocation'
+
+FROM VaccineAdministration, VaccineDosage
+
+GROUP BY SeriesDose
+
+ORDER BY SeriesDose;
+
+/* Present total number of administered doses for each year*/
+USE COVID19_DB
+
+SELECT YEAR(AdministrationDate), SUM(ReportedDosesAdministered) AS 'Total Doses Administered'
+
+FROM VaccineAdministration
+
+GROUP BY YEAR(AdministrationDate)
+
+ORDER BY YEAR(AdministrationDate);
