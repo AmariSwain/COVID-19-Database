@@ -247,3 +247,177 @@ GROUP BY
 YEAR(AdministrationDate)
 ORDER BY
 YEAR(AdministrationDate);
+
+/*Testing query with sample code*/
+USE COVID19_DB
+
+SELECT
+V.Name,
+VI.Ingredient 
+FROM
+Vaccine V INNER JOIN VaccineIngredient VI
+ON 
+V.VaccineID = VI.VaccineID
+WHERE 
+V.Name = 'Janssen';
+
+/*Listing active ingredients for each Vaccine in alphabetical order*/
+USE COVID19_DB
+
+SELECT 
+V.Name,
+VI.Ingredient
+FROM 
+Vaccine V INNER JOIN VaccineIngredient VI 
+ON 
+V.VaccineID = VI.VaccineID
+WHERE
+IngredientType = 'ACTIVE'
+ORDER BY 
+V.Name;
+
+/*Lists States that reported COVID deaths on 10/31/2020 that exceeded 10,000,000 p2*/
+USE COVID19_DB
+
+SELECT 
+Jurisdiction.Name,
+ReportedCovidDeaths
+FROM
+CovidDeaths 
+INNER JOIN Jurisdiction 
+ON 
+CovidDeaths.JurisdictionID = Jurisdiction.JurisdictionID
+WHERE 
+CalendarDate = '2020-10-31' AND Jurisdiction.Population > 10000000
+ORDER BY
+Jurisdiction.Name;
+
+/*States that reported 1 or more coivd cases on February 29th 2020. Show full names and be in alphabetical order*/
+USE COVID19_DB;
+
+SELECT 
+	Jurisdiction.Name,
+	CovidCases.ReportedCovidCases 
+FROM 
+	CovidCases
+	JOIN Jurisdiction 
+ON
+	CovidCases.JurisdictionID = Jurisdiction.JurisdictionID
+WHERE 
+	CovidCases.CalendarDate = '2020-02-29' AND CovidCases.ReportedCovidCases > 0
+ORDER BY 
+	Jurisdiction.Name ASC;
+
+/*Show dates and reported deaths from covid for the month of March 2020 in New York and California*/
+USE COVID19_DB
+
+SELECT 
+    CovidDeaths.CalendarDate,  
+	Jurisdiction.Name, 
+    CovidDeaths.ReportedCovidDeaths
+FROM 
+    CovidDeaths 
+    JOIN Jurisdiction 
+	ON 
+	CovidDeaths.JurisdictionId = Jurisdiction.JurisdictionId
+WHERE 
+    CovidDeaths.CalendarDate BETWEEN '2020-03-01' AND '2020-03-31'
+    AND CovidDeaths.ReportedCovidDeaths > 100
+    AND Jurisdiction.Name IN ('New York', 'California')
+ORDER BY 
+    CovidDeaths.CalendarDate
+
+/*Listing Average daily reported Covid Cases values in GA, FL, AL from DEC 1, 2020 - DEC 31, 2020*/
+USE COVID19_DB;
+
+SELECT 
+	Jurisdiction.Name, 
+	AVG(ReportedCovidCases) AS 'AVG Daily COVID-19 Cases - DEC 2020'
+FROM CovidCases
+	JOIN Jurisdiction 
+ON 
+	CovidCases.JurisdictionID =Jurisdiction.JurisdictionID
+WHERE
+	Jurisdiction.Name IN ('Georgia', 'Florida', 'Alabama')
+	AND CovidCases.CalendarDate BETWEEN '2020-12-01' AND '2020-12-31'
+GROUP BY
+	Jurisdiction.Name
+ORDER BY
+	Jurisdiction.Name;
+
+/*Listing Full Vaccine and state for vaccines administered on DEC 30 2020*/
+USE COVID19_DB
+
+SELECT 
+	Vaccine.Name, 
+	Jurisdiction.Name, 
+	ReportedDosesAdministered 
+FROM 
+	Vaccine
+	INNER JOIN VaccineAdministration
+ON 
+	VaccineAdministration.VaccineID = Vaccine.VaccineID 
+	INNER JOIN Jurisdiction
+ON 
+	VaccineAdministration.JurisdictionID = Jurisdiction.JurisdictionID
+WHERE 
+	AdministrationDate = '2020-12-30'
+ORDER BY 
+	Vaccine.Name, 
+	Jurisdiction.Name;
+
+/* Total COVID-19 cases that exceed 2,000,000 per state in 2021.P7*/
+USE COVID19_DB;
+
+SELECT 
+	Jurisdiction.Name, 
+	SUM(ReportedCovidCases) AS 'Total COVID-19 Cases'
+FROM 
+	CovidCases
+	JOIN Jurisdiction
+ON 
+	CovidCases.JurisdictionID = Jurisdiction.JurisdictionID
+WHERE 
+	YEAR(CalendarDate) = 2021
+GROUP BY 
+	Jurisdiction.Name
+HAVING
+	SUM(ReportedCovidCases) > 2000000
+ORDER BY 
+	Jurisdiction.Name;
+
+/*Showing full vaccine names and dose volumes of second dosages*/
+USE COVID19_DB
+
+SELECT 
+	Vaccine.Name,
+	MinimumAge,
+	DoseVolume
+FROM 
+	Vaccine
+	JOIN VaccineDosage
+ON
+	Vaccine.VaccineID = VaccineDosage.VaccineID
+WHERE
+	AdultDose = 'TRUE' AND SeriesDose = 'Second'
+ORDER BY 
+	Vaccine.Name;
+
+/* Number of reported COVID 19 cases per 1000 people in 2021 in FL, NY, CA, TX, MI P.10*/
+USE COVID19_DB
+
+SELECT
+	Jurisdiction.Name,
+	SUM(ReportedCovidCases*1000/Population) AS '2021 COVID-19 Cases/1,000 people'
+FROM
+	CovidCases
+	JOIN Jurisdiction
+ON 
+	CovidCases.JurisdictionID = Jurisdiction.JurisdictionID
+WHERE
+	YEAR(CalendarDate) = 2021
+	AND Jurisdiction.Name IN ('Florida', 'New York', 'California', 'Texas', 'Michigan')
+GROUP BY
+	Jurisdiction.Name
+ORDER BY
+	Jurisdiction.Name ASC;
