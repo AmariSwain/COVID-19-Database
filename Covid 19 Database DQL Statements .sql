@@ -421,3 +421,50 @@ GROUP BY
 	Jurisdiction.Name
 ORDER BY
 	Jurisdiction.Name ASC;
+
+	/* Testing Query before starting assignment */
+	SELECT
+	Name 
+	FROM
+	Jurisdiction
+	WHERE 
+	JurisdictionID IN 
+	(SELECT JurisdictionID
+		FROM	
+		CovidDeaths
+		WHERE  
+		CalendarDate = '03/11/2020');
+
+	/* CumulativeCovidCases_VW*/
+	CREATE VIEW
+	CumulativeCovidCases_VW AS
+	SELECT 
+	Name, 
+	SUM(ReportedCovidCases) AS CumulativeCovidCases
+	FROM
+	CovidCases
+	JOIN Jurisdiction ON CovidCases.JurisdictionID = Jurisdiction.JurisdictionID
+	GROUP BY
+	Name;
+	GO 
+
+	SELECT * FROM CumulativeCovidCases_VW;
+
+	/*DROP VIEW CumulativeCovidCases_VW;*/
+
+	/* CumulativeCovidCases_VW*/
+CREATE VIEW 
+	CumulativeDoseAllocation_VW AS
+	SELECT
+		Vaccine.Name AS Vaccine,
+		Jurisdiction.Name AS JurisdictionName,
+		SUM(VaccineDistribution.DoseAllocation) AS CumulativeDoseAllocation
+	FROM
+		VaccineDistribution
+		INNER JOIN Vaccine ON Vaccine.VaccineID = VaccineDistribution.VaccineID
+		INNER JOIN Jurisdiction ON Jurisdiction.JurisdictionID = VaccineDistribution.JurisdictionID
+	GROUP BY 
+		Jurisdiction.Name, Vaccine.Name;
+
+	SELECT * FROM CumulativeDoseAllocation_VW;
+	/*DROP VIEW CumulativeDoseAllocation_VW;*/
