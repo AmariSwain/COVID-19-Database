@@ -464,7 +464,191 @@ CREATE VIEW
 		INNER JOIN Vaccine ON Vaccine.VaccineID = VaccineDistribution.VaccineID
 		INNER JOIN Jurisdiction ON Jurisdiction.JurisdictionID = VaccineDistribution.JurisdictionID
 	GROUP BY 
-		Jurisdiction.Name, Vaccine.Name;
+		Jurisdiction.Name, Vaccine.Name
+		ORDER BY 
+		 Jurisdiction.Name;
 
 	SELECT * FROM CumulativeDoseAllocation_VW;
-	/*DROP VIEW CumulativeDoseAllocation_VW;*/
+	DROP VIEW CumulativeDoseAllocation_VW;
+
+	/* CumulativeCovidCases_CTE */
+	 WITH 
+	 CumulativeCovidCases_CTE AS (
+	 SELECT
+		Jurisdiction.Name AS JurisdictionName,
+		SUM(ReportedCovidCases) AS CumulativeCovidCases
+	FROM
+		CovidCases
+		INNER JOIN Jurisdiction ON CovidCases.JurisdictionID = Jurisdiction.JurisdictionID
+	GROUP BY 
+		Jurisdiction.Name
+		)
+	SELECT 
+		JurisdictionName, 
+		CumulativeCovidCases 
+	FROM	
+		CumulativeCovidCases_CTE;
+	
+	/*CumulativeVaccineDistribution_CTE*/
+	WITH
+		CumulativeVaccineDistribution_CTE AS (
+	SELECT
+		Vaccine.Name AS Vaccine,
+		Jurisdiction.Name AS JurisdictionName,
+		SUM(VaccineDistribution.DoseAllocation) AS CumulativeDoseAllocation
+	FROM
+		VaccineDistribution
+		INNER JOIN Vaccine ON Vaccine.VaccineID = VaccineDistribution.VaccineID
+		INNER JOIN Jurisdiction ON Jurisdiction.JurisdictionID = VaccineDistribution.JurisdictionID
+	GROUP BY 
+		Jurisdiction.Name,
+		Vaccine.Name
+	)
+	SELECT
+		Vaccine,
+		JurisdictionName,
+		CumulativeDoseAllocation
+	FROM
+		CumulativeVaccineDistribution_CTE;
+
+	/*Unionized statement for Northeast states and southwestern states*/
+	SELECT 
+		'NORTHEAST' AS Region,
+		AVG(CovidCases.ReportedCovidCases) AS 'AVGDaily Covid 19 Cases'
+	FROM 
+		CovidCases
+		INNER JOIN Jurisdiction ON Jurisdiction.JurisdictionID = CovidCases.JurisdictionID
+	WHERE
+		Jurisdiction.Name  IN ( 'New York', 'New Jersey', 'Connecticut')
+
+	UNION
+
+	SELECT 
+		'SOUTHWEST' AS Region,
+		AVG(CovidCases.ReportedCovidCases) AS 'AVGDaily Covid 19 Cases'
+	FROM 
+		CovidCases
+		INNER JOIN Jurisdiction ON Jurisdiction.JurisdictionID = CovidCases.JurisdictionID
+	WHERE
+		Jurisdiction.Name  IN ( 'Arizona', 'Nevada', 'New Mexico');
+
+/* Uinionized SQL statement for Covd-19 deaths*/
+	SELECT
+		'May 2-8, 2020' AS Week, 
+		SUM(ReportedCovidDeaths) AS CumulativeDeaths
+	FROM 
+		CovidDeaths
+	WHERE 
+		CalendarDate >= '2020-05-02' AND CalendarDate <= '2020-05-08'
+
+	UNION
+
+	SELECT 
+		'August 22-28, 2020' AS Week, 
+		SUM(ReportedCovidDeaths) AS CumulativeDeaths
+	FROM 
+	CovidDeaths
+	WHERE
+	CalendarDate >= '2020-08-22' AND CalendarDate <= '2020-08-28'
+
+
+	UNION
+
+	SELECT	
+		'December 12-18, 2020' AS Week, 
+		SUM(ReportedCovidDeaths) AS CumulativeDeaths
+	FROM 
+		CovidDeaths
+	WHERE 
+		CalendarDate >= '2020-12-12' AND CalendarDate <= '2020-12-18';
+
+	/*Daily Administration of Janssen exceeding 40,000 does*/
+	
+	SELECT 
+		Jurisdiction.Name AS Name
+	FROM
+		Jurisdiction
+	WHERE 
+		JurisdictionID IN (
+			SELECT 
+				VaccineAdministration.JurisdictionID
+			FROM
+				VaccineAdministration
+				INNER JOIN Vaccine ON Vaccine.VaccineID = VaccineAdministration.VaccineID
+			WHERE
+			Vaccine.Name = 'Janssen' AND VaccineAdministration.ReportedDosesAdministered > 40000
+	)
+	ORDER BY
+	Jurisdiction.Name;
+
+	/* Reported daily COVID 19 deaths that exceed the max covid daily deaths in New Jersey*/
+	
+	SELECT
+		DISTINCT Jurisdiction.Name AS Name
+	FROM 
+		Jurisdiction
+		INNER JOIN CovidDeaths CD ON Jurisdiction.JurisdictionID = CD.JurisdictionID
+	WHERE
+		CD.ReportedCovidDeaths > (
+		SELECT 
+			MAX(CD.ReportedCovidDeaths)
+		FROM 
+			CovidDeaths CD
+		WHERE 
+			JurisdictionID = (
+			SELECT
+				JurisdictionID
+			FROM
+				Jurisdiction
+			WHERE 
+			Jurisdiction.Name = 'New Jersey'))
+	ORDER BY
+	Name ASC;
+
+	/*Less daily covid cases on April 20, 2021 than they had on April 20, 2020*/
+
+	SELECT 
+		J.Name AS Name
+	FROM
+		CovidCases CC1 
+		INNER JOIN Jurisdiction J ON CC1.JurisdictionID = J.JurisdictionID
+	WHERE 
+		CalendarDate = '04/20/2021'
+		AND ReportedCovidCases < (
+			SELECT 
+				ReportedCovidCases
+			FROM 
+				CovidCases CC2
+			WHERE 
+			CC1.JurisdictionID = CC2.JurisdictionID
+			AND CalendarDate = '04/20/2020'
+	)
+	ORDER BY 
+		Name;
+	/*Pfizer-BioNTech Vaccine dose administration amounts on January 18th, 2021 that Exceeded Their respective daily average adminstration levels*/
+
+	SELECT 
+		J.Name As Name 
+	FROM
+		Jurisdiction J
+		INNER JOIN VaccineAdministration VA1 ON J.JurisdictionID = VA1.JurisdictionID
+		INNER JOIN Vaccine V ON V.VaccineID = VA1.VaccineID
+	WHERE 
+		AdministrationDate = '01/18/2021'
+		AND V.Name = 'Pfizer-BioNTech'
+		AND VA1.ReportedDosesAdministered > (
+			SELECT 
+				AVG(VA2.ReportedDosesAdministered)
+			FROM	
+				VaccineAdministration VA2
+			WHERE 
+				VA2.JurisdictionID = J.JurisdictionID
+				AND VA2.VaccineID = V.VaccineID
+				AND VA2.AdministrationDate < '01/18/2021'
+				
+				
+		)
+	ORDER BY 
+	Name;
+	
+
