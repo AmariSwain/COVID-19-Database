@@ -1,6 +1,6 @@
 # COVID-19-Database
 
-In this project, I'm gonna be setting up a database for storing COVID-19 data using SQL Data Manipulation Language (DML) statements. My goal is to become a pro at using a Relational Database Management System (RDBMS) for database installation and manipulation, which aligns with the course outcome of HI520-2.
+In this project, I'm going to be setting up a database for storing COVID-19 data using SQL Data Manipulation Language (DML) statements. My goal is to become a pro at using a Relational Database Management System (RDBMS) for database installation and manipulation, which aligns with the course outcome of HI520-2.
 
 I'll be using the CREATE and ALTER keywords to create databases, tables, columns, and keys, and putting my DML skills to the test by writing a database script. I'm also going to try out different ways to insert data into the database, including manual data entry, scripting, and importing CSV files. Finally, I'll be getting hands-on experience with modifying existing data in a table using DML commands.  
 
